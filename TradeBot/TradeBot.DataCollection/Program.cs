@@ -20,7 +20,7 @@ namespace TradeBot.DataCollection
                 th2.Start();
                 th3.Start();
 
-                // Test 2
+                // Test 3
             }
             catch (Exception ex)
             {
