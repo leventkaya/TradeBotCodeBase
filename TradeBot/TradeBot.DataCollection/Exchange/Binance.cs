@@ -15,7 +15,7 @@ namespace TradeBot.DataCollection
                 await socketClient.Spot.SubscribeToSymbolTickerUpdatesAsync("BTCUSDT", data =>
                 {
                     WriteFile.WriteFileCsvBinance((BinanceStreamTick)data);
-                    Console.WriteLine($"Time:{data.CloseTime} Time2:{DateTime.Now} Price:{data.LastPrice}");
+                    //Console.WriteLine($"Time:{data.CloseTime} Time2:{DateTime.Now} Price:{data.LastPrice}");
                 });
             }
             catch (Exception ex)
