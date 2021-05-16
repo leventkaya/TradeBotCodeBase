@@ -13,35 +13,41 @@ namespace TradeBot.DataCollection
     {
         public static void GetData()
         {
-
-            while (true)
+            try
             {
-                if (DateTime.Now.Second == 0)
+                while (true)
                 {
-                    var webRequest = WebRequest.Create("https://www.paribu.com/ticker") as HttpWebRequest;
-                    if (webRequest == null)
+                    if (DateTime.Now.Second == 0)
                     {
-                        return;
-                    }
-
-                    webRequest.ContentType = "application/json";
-                    webRequest.UserAgent = "Nothing";
-
-                    using (var s = webRequest.GetResponse().GetResponseStream())
-                    {
-                        using (var sr = new StreamReader(s))
+                        var webRequest = WebRequest.Create("https://www.paribu.com/ticker") as HttpWebRequest;
+                        if (webRequest == null)
                         {
-                            var contributorsAsJson = sr.ReadToEnd();
-                            var orderResponse = Coins.FromJson(contributorsAsJson);
-                            //var BTC_USDT= orderResponse.Where(x=>x.Key=="BTC_USDT").Select(i => $"{i.Key}: {i.Value.Last}").ToList().ForEach(System.Console.WriteLine);
-                            var BTC_USDT = orderResponse.Where(x => x.Key == "BTC_USDT").Select(i => $"{i.Value.Last}").First();
-                            // orderResponse üzerinden devam... 
-                            WriteFile.WriteFileCsvParibu(BTC_USDT);
-
+                            return;
                         }
+
+                        webRequest.ContentType = "application/json";
+                        webRequest.UserAgent = "Nothing";
+
+                        using (var s = webRequest.GetResponse().GetResponseStream())
+                        {
+                            using (var sr = new StreamReader(s))
+                            {
+                                var contributorsAsJson = sr.ReadToEnd();
+                                var orderResponse = Coins.FromJson(contributorsAsJson);
+                                //var BTC_USDT= orderResponse.Where(x=>x.Key=="BTC_USDT").Select(i => $"{i.Key}: {i.Value.Last}").ToList().ForEach(System.Console.WriteLine);
+                                var BTC_USDT = orderResponse.Where(x => x.Key == "BTC_USDT").Select(i => $"{i.Value.Last}").First();
+                                // orderResponse üzerinden devam... 
+                                WriteFile.WriteFileCsvParibu(BTC_USDT);
+
+                            }
+                        }
+                        System.Threading.Thread.Sleep(10000);
                     }
-                    System.Threading.Thread.Sleep(10000);
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR:{ex.Message}-------{DateTime.Now}");
             }
         }
         public static void GetMarket()

@@ -8,14 +8,21 @@ namespace TradeBot.DataCollection
     {
         public static async void GetData()
         {
-
-            var socketClient = new BinanceSocketClient();
-
-            await socketClient.Spot.SubscribeToSymbolTickerUpdatesAsync("BTCUSDT", data =>
+            try
             {
-                WriteFile.WriteFileCsvBinance((BinanceStreamTick)data);
-                Console.WriteLine($"Time:{data.CloseTime} Time2:{DateTime.Now} Price:{data.LastPrice}");
-            });
+                var socketClient = new BinanceSocketClient();
+
+                await socketClient.Spot.SubscribeToSymbolTickerUpdatesAsync("BTCUSDT", data =>
+                {
+                    WriteFile.WriteFileCsvBinance((BinanceStreamTick)data);
+                    Console.WriteLine($"Time:{data.CloseTime} Time2:{DateTime.Now} Price:{data.LastPrice}");
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR:{ex.Message}-------{DateTime.Now}");
+            }
+           
 
         }
     }
